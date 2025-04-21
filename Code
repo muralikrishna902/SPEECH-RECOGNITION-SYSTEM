@@ -1,5 +1,3 @@
-1.Speech Recognition Code (Python on PC or Raspberry Pi)
-
 import speech_recognition as sr
 import serial
 import time
@@ -33,24 +31,3 @@ while True:
         print("Could not understand the audio.")
     except sr.RequestError as e:
         print(f"Could not request results; {e}")
-
-
-2.Arduino Code (if using Arduino Uno)
-
-void setup() {
-  Serial.begin(9600);
-  pinMode(8, OUTPUT);  // Connect LED or relay to pin 8
-}
-
-void loop() {
-  if (Serial.available()) {
-    String command = Serial.readStringUntil('\n');
-    command.trim();
-
-    if (command == "ON") {
-      digitalWrite(8, HIGH);
-    } else if (command == "OFF") {
-      digitalWrite(8, LOW);
-    }
-  }
-}
