@@ -1,0 +1,56 @@
+1.Speech Recognition Code (Python on PC or Raspberry Pi)
+
+import speech_recognition as sr
+import serial
+import time
+
+# Initialize serial communication with embedded board
+ser = serial.Serial('COM3', 9600)  # Change COM port as per your system
+time.sleep(2)
+
+# Initialize recognizer
+r = sr.Recognizer()
+
+print("Say a command (like 'turn on light' or 'turn off light')")
+
+while True:
+    with sr.Microphone() as source:
+        print("Listening...")
+        audio = r.listen(source)
+
+    try:
+        command = r.recognize_google(audio).lower()
+        print(f"Recognized: {command}")
+
+        if "turn on light" in command:
+            ser.write(b'ON\n')
+        elif "turn off light" in command:
+            ser.write(b'OFF\n')
+        else:
+            print("Unknown command.")
+
+    except sr.UnknownValueError:
+        print("Could not understand the audio.")
+    except sr.RequestError as e:
+        print(f"Could not request results; {e}")
+
+
+2.Arduino Code (if using Arduino Uno)
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(8, OUTPUT);  // Connect LED or relay to pin 8
+}
+
+void loop() {
+  if (Serial.available()) {
+    String command = Serial.readStringUntil('\n');
+    command.trim();
+
+    if (command == "ON") {
+      digitalWrite(8, HIGH);
+    } else if (command == "OFF") {
+      digitalWrite(8, LOW);
+    }
+  }
+}
